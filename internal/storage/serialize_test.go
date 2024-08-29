@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 
@@ -10,16 +11,19 @@ import (
 
 func TestSerialization(t *testing.T) {
 	password := "my-password"
-	data := make(data.T)
 	key, keyString := crypto.DeriveKey(password)
 
-	fileContent := toFileContent(keyString, data, key)
-	keyStringResult, dataResult, err := toKeyStringAndData(fileContent, key)
+	data := make(data.T)
+	jsonData, _ := json.Marshal(data)
+	ciphertext := crypto.Encrypt(jsonData, key)
+
+	fileContent := toFileContent(keyString, ciphertext)
+	keyStringResult, ciphertextResult, err := toKeyStringAndData(fileContent)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if keyStringResult != keyString || !reflect.DeepEqual(dataResult, data) {
+	if keyStringResult != keyString || !reflect.DeepEqual(ciphertextResult, ciphertext) {
 		t.Fatal("keystring/data are not the same")
 	}
 }

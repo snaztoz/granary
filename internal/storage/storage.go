@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 
@@ -16,8 +17,10 @@ func NewFile(path, password string) {
 	defer f.Close()
 
 	key, keyString := crypto.DeriveKey(password)
-	fileContent := toFileContent(keyString, make(data.T), key)
+	jsonData, _ := json.Marshal(make(data.T))
+	ciphertext := crypto.Encrypt(jsonData, key)
 
+	fileContent := toFileContent(keyString, ciphertext)
 	if _, err := f.Write([]byte(fileContent)); err != nil {
 		log.Fatalln(err)
 	}

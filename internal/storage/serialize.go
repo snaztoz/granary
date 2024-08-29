@@ -2,13 +2,9 @@ package storage
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
-
-	"github.com/snaztoz/granary/internal/crypto"
-	"github.com/snaztoz/granary/internal/data"
 )
 
 const (
@@ -19,26 +15,22 @@ var (
 	ErrInvalidHeader = errors.New("invalid Granary secret file header")
 )
 
-func toFileContent(keyString string, data data.T, key []byte) string {
-	dataJson, _ := json.Marshal(data)
-	encrypted := crypto.Encrypt(dataJson, key)
-	encoded := base64.StdEncoding.EncodeToString(encrypted)
+func toFileContent(keyString string, ciphertext []byte) string {
+	encoded := base64.StdEncoding.EncodeToString(ciphertext)
 	return fmt.Sprintf("%s:%s:%s", secretFileHeader, keyString, encoded)
 }
 
-func toKeyStringAndData(fileContent string, key []byte) (keyString string, data data.T, err error) {
-	data = make(map[string]string)
+func toKeyStringAndData(fileContent string) (keyString string, ciphertext []byte, err error) {
 	splitted := strings.Split(fileContent, ":")
-
 	if splitted[0] != secretFileHeader {
-		return "", data, ErrInvalidHeader
+		return "", nil, ErrInvalidHeader
 	}
 
-	keyString, encoded := splitted[1], splitted[2]
+	keyString = splitted[1]
+	ciphertext, err = base64.StdEncoding.DecodeString(splitted[2])
+	if err != nil {
+		return "", nil, err
+	}
 
-	encrypted, _ := base64.StdEncoding.DecodeString(encoded)
-	dataJson := crypto.Decrypt(encrypted, key)
-	json.Unmarshal(dataJson, &data)
-
-	return keyString, data, nil
+	return keyString, ciphertext, nil
 }
