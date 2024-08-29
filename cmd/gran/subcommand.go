@@ -1,5 +1,6 @@
 package main
 
 var (
-	scNew = subCommandNew{}
+	scList = subCommandList{}
+	scNew  = subCommandNew{}
 )

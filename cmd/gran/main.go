@@ -24,6 +24,11 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			{
+				Name:   scList.name(),
+				Usage:  scList.usage(),
+				Action: scList.handle,
+			},
+			{
 				Name:   scNew.name(),
 				Usage:  scNew.usage(),
 				Action: scNew.handle,

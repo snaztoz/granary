@@ -27,7 +27,28 @@ func NewFile(path, password string) {
 }
 
 func ReadFile(path, password string) (data data.T, err error) {
-	return make(map[string]string), nil
+	fileContent, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	keyString, ciphertext, err := toKeyStringAndData(string(fileContent))
+	if err != nil {
+		return nil, err
+	}
+
+	key, err := crypto.MatchPassword(password, keyString)
+	if err != nil {
+		return nil, err
+	}
+
+	plaintext := crypto.Decrypt(ciphertext, key)
+	err = json.Unmarshal(plaintext, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
 func WriteFile(path, password string, data data.T) error {
