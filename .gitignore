@@ -1,0 +1,5 @@
+# Build output program
+./gran
+
+# Temporary/test Granary secret files
+*.gran
