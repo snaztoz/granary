@@ -39,23 +39,15 @@ func main() {
 				Action: scNew.handle,
 			},
 			{
+				Name:   scRemove.name(),
+				Usage:  scRemove.usage(),
+				Action: scRemove.handle,
+			},
+			{
 				Name:   scSet.name(),
 				Usage:  scSet.usage(),
 				Action: scSet.handle,
 			},
-			// {
-			// 	Name:   commands.GetCommandName,
-			// 	Usage:  commands.GetCommandUsage,
-			// 	Action: commands.HandleGetCommand,
-			// },
-			// {
-			// 	Name:  "set",
-			// 	Usage: "set a single key-value pair to Granary secret file",
-			// 	Action: func(c *cli.Context) error {
-			// 		fmt.Println("setting a single key-value")
-			// 		return nil
-			// 	},
-			// },
 		},
 	}
 

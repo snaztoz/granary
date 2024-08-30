@@ -1,8 +1,9 @@
 package main
 
 var (
-	scGet  = subCommandGet{}
-	scList = subCommandList{}
-	scNew  = subCommandNew{}
-	scSet  = subCommandSet{}
+	scGet    = subCommandGet{}
+	scList   = subCommandList{}
+	scNew    = subCommandNew{}
+	scRemove = subCommandRemove{}
+	scSet    = subCommandSet{}
 )
