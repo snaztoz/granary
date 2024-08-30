@@ -24,7 +24,7 @@ func (sc *subCommandNew) handle(c *cli.Context) error {
 		log.Fatalf("file already exists: %s\n\n", path)
 	}
 
-	password, err := util.AskPassword("Enter a new passkey: ")
+	password, err := util.AskPassword("Enter a new passkey")
 	if err != nil {
 		log.Fatalln(err)
 	}

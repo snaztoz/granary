@@ -8,7 +8,7 @@ import (
 )
 
 func AskPassword(prompt string) (string, error) {
-	fmt.Fprintf(os.Stderr, prompt)
+	fmt.Fprintf(os.Stderr, "%s: ", prompt)
 
 	passwordBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
 	if err != nil {

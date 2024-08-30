@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 
 	"github.com/snaztoz/granary/internal/storage"
 	"github.com/snaztoz/granary/internal/util"
@@ -25,7 +26,7 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatalf("file is not exist: %s\n\n", path)
 	}
 
-	password, err := util.AskPassword("Enter the passkey: ")
+	password, err := util.AskPassword("Enter passkey")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -40,7 +41,15 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatalln(err)
 	}
 
+	// Print sorted alphabetically
+
+	ks := make([]string, 0, len(data))
 	for k := range data {
+		ks = append(ks, k)
+	}
+	sort.Strings(ks)
+
+	for _, k := range ks {
 		fmt.Println(k)
 	}
 
