@@ -23,22 +23,22 @@ func (sc *subCommandList) usage() string {
 func (sc *subCommandList) handle(c *cli.Context) error {
 	path := c.String("file")
 	if !util.IsFileExists(path) {
-		log.Fatalf("file is not exist: %s\n\n", path)
+		log.Fatal("file is not exist: ", path)
 	}
 
 	password, err := util.AskPassword("Enter passkey")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	st, err := storage.Open(path, password)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	data, err := st.ReadFile()
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	// Print sorted alphabetically

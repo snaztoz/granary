@@ -15,7 +15,11 @@ func TestSerialization(t *testing.T) {
 
 	data := make(data.T)
 	jsonData, _ := json.Marshal(data)
-	ciphertext := crypto.Encrypt(jsonData, key)
+
+	ciphertext, err := crypto.Encrypt(jsonData, key)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	fileContent := toFileContent(keyString, ciphertext)
 	keyStringResult, ciphertextResult, err := toKeyStringAndData(fileContent)

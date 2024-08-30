@@ -2,28 +2,33 @@ package storage
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 
 	"github.com/snaztoz/granary/internal/crypto"
 	"github.com/snaztoz/granary/internal/data"
 )
 
-func New(path, password string) {
+func New(path, password string) error {
 	f, err := os.Create(path)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 	defer f.Close()
 
 	key, keyString := crypto.DeriveKey(password)
 	jsonData, _ := json.Marshal(make(data.T))
-	ciphertext := crypto.Encrypt(jsonData, key)
+
+	ciphertext, err := crypto.Encrypt(jsonData, key)
+	if err != nil {
+		return err
+	}
 
 	content := toFileContent(keyString, ciphertext)
 	if _, err := f.Write([]byte(content)); err != nil {
-		log.Fatalln(err)
+		return err
 	}
+
+	return nil
 }
 
 func Open(path, password string) (storage *Storage, err error) {
@@ -60,7 +65,11 @@ type Storage struct {
 func (s *Storage) ReadFile() (data data.T, err error) {
 	_, ciphertext, _ := toKeyStringAndData(s.content)
 
-	plaintext := crypto.Decrypt(ciphertext, s.key)
+	plaintext, err := crypto.Decrypt(ciphertext, s.key)
+	if err != nil {
+		return nil, err
+	}
+
 	if err = json.Unmarshal(plaintext, &data); err != nil {
 		return nil, err
 	}
@@ -74,7 +83,12 @@ func (s *Storage) WriteFile(data data.T) error {
 		return err
 	}
 
-	s.content = toFileContent(s.keyString, crypto.Encrypt(jsonData, s.key))
+	ciphertext, err := crypto.Encrypt(jsonData, s.key)
+	if err != nil {
+		return err
+	}
+
+	s.content = toFileContent(s.keyString, ciphertext)
 
 	if err := os.WriteFile(s.path, []byte(s.content), 0644); err != nil {
 		return err

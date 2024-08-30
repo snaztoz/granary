@@ -17,9 +17,17 @@ func TestEncrypt(t *testing.T) {
 		log.Fatalln(err)
 	}
 
-	ciphertext := crypto.Encrypt(plaintext, key)
+	ciphertext, err := crypto.Encrypt(plaintext, key)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	if res := crypto.Decrypt(ciphertext, key); !bytes.Equal(res, plaintext) {
+	res, err := crypto.Decrypt(ciphertext, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !bytes.Equal(res, plaintext) {
 		t.Fatalf("plaintext mismatch: expecting %v, get %v instead", plaintext, res)
 	}
 }

@@ -16,8 +16,7 @@ func AskPassword(prompt string) (string, error) {
 	}
 
 	// add blank lines
-	fmt.Println()
-	fmt.Println()
+	fmt.Fprint(os.Stderr, "\n\n")
 
 	return string(passwordBytes), nil
 }

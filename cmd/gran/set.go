@@ -21,32 +21,32 @@ func (sc *subCommandSet) usage() string {
 func (sc *subCommandSet) handle(c *cli.Context) error {
 	path := c.String("file")
 	if !util.IsFileExists(path) {
-		log.Fatalf("file is not exist: %s\n\n", path)
+		log.Fatal("file is not exist: ", path)
 	}
 
 	args := c.Args()
 	if args.Len() != 2 {
-		log.Fatalf("wrong number of arguments\n\nusage: gran set <KEY> <VALUE>\n\n")
+		log.Fatal("incorrect number of arguments\n\nusage: gran set <KEY> <VALUE>")
 	}
 
 	password, err := util.AskPassword("Enter passkey")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	st, err := storage.Open(path, password)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	data, err := st.ReadFile()
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	data[args.Get(0)] = args.Get(1)
 	if err := st.WriteFile(data); err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	return nil

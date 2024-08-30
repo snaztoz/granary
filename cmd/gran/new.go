@@ -21,15 +21,17 @@ func (sc *subCommandNew) usage() string {
 func (sc *subCommandNew) handle(c *cli.Context) error {
 	path := c.String("file")
 	if util.IsFileExists(path) {
-		log.Fatalf("file already exists: %s\n\n", path)
+		log.Fatal("file already exists: ", path)
 	}
 
 	password, err := util.AskPassword("Enter a new passkey")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
-	storage.New(path, password)
+	if err := storage.New(path, password); err != nil {
+		log.Fatal(err)
+	}
 
 	return nil
 }
