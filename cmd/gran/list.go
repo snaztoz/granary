@@ -25,7 +25,7 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatalf("file is not exist: %s\n\n", path)
 	}
 
-	password, err := util.AskPassword()
+	password, err := util.AskPassword("Enter the passkey: ")
 	if err != nil {
 		log.Fatalln(err)
 	}

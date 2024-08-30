@@ -29,7 +29,7 @@ func (sc *subCommandSet) handle(c *cli.Context) error {
 		log.Fatalf("wrong number of arguments\n\nusage: gran set <KEY> <VALUE>\n\n")
 	}
 
-	password, err := util.AskPassword()
+	password, err := util.AskPassword("Enter the passkey: ")
 	if err != nil {
 		log.Fatalln(err)
 	}
