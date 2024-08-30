@@ -9,7 +9,7 @@ import (
 	"github.com/snaztoz/granary/internal/data"
 )
 
-func NewFile(path, password string) {
+func New(path, password string) {
 	f, err := os.Create(path)
 	if err != nil {
 		log.Fatalln(err)

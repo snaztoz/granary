@@ -29,7 +29,7 @@ func (sc *subCommandNew) handle(c *cli.Context) error {
 		log.Fatalln(err)
 	}
 
-	storage.NewFile(path, password)
+	storage.New(path, password)
 
 	return nil
 }
