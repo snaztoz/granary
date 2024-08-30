@@ -58,7 +58,7 @@ p.s. This is just a hobby project, not a professional tool. Use at your own risk
 
 ## How it works?
 
-All of the secrets are encrypted inside a Granary secret file, while the key itself is be derived from the passed passkey using PBKDF2.
+All of the secrets are encrypted inside a Granary secret file, while the key itself is derived from the entered passkey using PBKDF2.
 
 The content of Granary secret file is a simple ASCII string with the following format:
 
