@@ -52,5 +52,32 @@ func ReadFile(path, password string) (data data.T, err error) {
 }
 
 func WriteFile(path, password string, data data.T) error {
+	fileContent, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	keyString, _, err := toKeyStringAndData(string(fileContent))
+	if err != nil {
+		return err
+	}
+
+	key, err := crypto.MatchPassword(password, keyString)
+	if err != nil {
+		return err
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	ciphertext := crypto.Encrypt(jsonData, key)
+	newFileContent := toFileContent(keyString, ciphertext)
+
+	if err := os.WriteFile(path, []byte(newFileContent), 0644); err != nil {
+		return err
+	}
+
 	return nil
 }

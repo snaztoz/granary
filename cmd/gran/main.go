@@ -33,6 +33,11 @@ func main() {
 				Usage:  scNew.usage(),
 				Action: scNew.handle,
 			},
+			{
+				Name:   scSet.name(),
+				Usage:  scSet.usage(),
+				Action: scSet.handle,
+			},
 			// {
 			// 	Name:   commands.GetCommandName,
 			// 	Usage:  commands.GetCommandUsage,
