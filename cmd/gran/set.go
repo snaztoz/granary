@@ -34,13 +34,18 @@ func (sc *subCommandSet) handle(c *cli.Context) error {
 		log.Fatalln(err)
 	}
 
-	data, err := storage.ReadFile(path, password)
+	st, err := storage.Open(path, password)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	data, err := st.ReadFile()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	data[args.Get(0)] = args.Get(1)
-	if err := storage.WriteFile(path, password, data); err != nil {
+	if err := st.WriteFile(data); err != nil {
 		log.Fatalln(err)
 	}
 

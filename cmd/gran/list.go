@@ -30,7 +30,12 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatalln(err)
 	}
 
-	data, err := storage.ReadFile(path, password)
+	st, err := storage.Open(path, password)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	data, err := st.ReadFile()
 	if err != nil {
 		log.Fatalln(err)
 	}
