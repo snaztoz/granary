@@ -16,7 +16,7 @@ func (sc *subCommandGet) name() string {
 }
 
 func (sc *subCommandGet) usage() string {
-	return "get secret value"
+	return "get a secret value"
 }
 
 func (sc *subCommandGet) handle(c *cli.Context) error {

@@ -17,7 +17,7 @@ func (sc *subCommandList) name() string {
 }
 
 func (sc *subCommandList) usage() string {
-	return "get the list of all secrets inside a Granary secret file"
+	return "get the list of all stored secrets"
 }
 
 func (sc *subCommandList) handle(c *cli.Context) error {
