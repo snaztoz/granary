@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"sort"
 
 	"github.com/snaztoz/granary/internal/storage"
 	"github.com/snaztoz/granary/internal/util"
@@ -41,17 +40,7 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	// Print sorted alphabetically
-
-	ks := make([]string, 0, len(data))
-	for k := range data {
-		ks = append(ks, k)
-	}
-	sort.Strings(ks)
-
-	for _, k := range ks {
-		fmt.Println(k)
-	}
+	fmt.Println(data)
 
 	return nil
 }
