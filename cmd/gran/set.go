@@ -26,7 +26,7 @@ func (sc *subCommandSet) handle(c *cli.Context) error {
 
 	args := c.Args()
 	if args.Len() != 2 {
-		log.Fatal("incorrect number of arguments\n\nusage: gran set <KEY> <VALUE>")
+		log.Fatal("incorrect number of arguments (usage: gran set <KEY> <VALUE>)")
 	}
 
 	password, err := util.AskPassword("Enter passkey")

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ErrPasswordMismatch = errors.New("password mismatch")
+	ErrPasswordMismatch = errors.New("incorrect password")
 )
 
 func DeriveKey(password string) (key []byte, keyString string) {

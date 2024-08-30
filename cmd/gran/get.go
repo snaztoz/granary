@@ -27,7 +27,7 @@ func (sc *subCommandGet) handle(c *cli.Context) error {
 
 	args := c.Args()
 	if args.Len() != 1 {
-		log.Fatal("incorrect number of arguments\n\nusage: gran get <KEY>")
+		log.Fatal("incorrect number of arguments (usage: gran get <KEY>)")
 	}
 
 	password, err := util.AskPassword("Enter passkey")
