@@ -16,8 +16,8 @@ func main() {
 		Usage: "store your secrets inside an encrypted file",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "file",
-				Aliases: []string{"f"},
+				Name:    "path",
+				Aliases: []string{"p"},
 				Value:   "secrets.gran",
 				Usage:   "Path to Granary secret file",
 			},
