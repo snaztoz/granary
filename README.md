@@ -2,7 +2,7 @@
 
 A simple secret management tool. It encrypts all of your secrets inside a file so that the values can't be retrieved directly.
 
-By default, it will use a file named `secrets.gran` in current working directory. You can change this value by using the `-f` flag.
+By default, it will use a file named `secrets.gran` in current working directory. You can change this value by using the `-p` flag.
 
 p.s. This is just a hobby project, not a professional tool. Use at your own risk.
 
