@@ -40,7 +40,9 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	fmt.Println(data)
+	if len(data) > 0 {
+		fmt.Println(data)
+	}
 
 	return nil
 }
