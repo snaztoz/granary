@@ -20,7 +20,7 @@ func (sc *subCommandGet) usage() string {
 }
 
 func (sc *subCommandGet) handle(c *cli.Context) error {
-	path := c.String("file")
+	path := c.String("path")
 	if !util.IsFileExists(path) {
 		log.Fatal("file is not exist: ", path)
 	}
