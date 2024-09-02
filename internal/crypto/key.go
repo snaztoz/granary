@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"errors"
 
+	"golang.org/x/crypto/argon2"
 	"golang.org/x/crypto/pbkdf2"
 )
 
@@ -32,7 +33,7 @@ func MatchPassword(password, keyString string) (key []byte, err error) {
 
 func deriveKeyWithSalt(password string, salt []byte) (key []byte, keyString string) {
 	key = pbkdf2.Key([]byte(password), salt, 4096, 32, sha256.New)
-	hash := sha256.Sum256(key)
+	hash := argon2.IDKey(key, salt, 1, 64*1024, 4, 32)
 
 	keyString = toKeyString(salt, hash[:])
 	return key, keyString
