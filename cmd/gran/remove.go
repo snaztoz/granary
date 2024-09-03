@@ -49,6 +49,9 @@ func (sc *subCommandRemove) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
+	// remove all previous file content as they will mess up with
+	// the new Base64 encoded data
+	f.Truncate(0)
 	f.Seek(0, io.SeekStart)
 	if err := st.Persist(f); err != nil {
 		log.Fatal(err)
