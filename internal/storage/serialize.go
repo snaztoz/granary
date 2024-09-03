@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	secretFileHeader = "gran-secret-file"
+	SecretFileHeader = "gran-secret-file"
 )
 
 var (
@@ -17,12 +17,12 @@ var (
 
 func toFileContent(keyString string, ciphertext []byte) string {
 	encoded := base64.StdEncoding.EncodeToString(ciphertext)
-	return fmt.Sprintf("%s:%s:%s", secretFileHeader, keyString, encoded)
+	return fmt.Sprintf("%s:%s:%s", SecretFileHeader, keyString, encoded)
 }
 
 func toKeyStringAndData(fileContent string) (keyString string, ciphertext []byte, err error) {
 	splitted := strings.Split(fileContent, ":")
-	if splitted[0] != secretFileHeader {
+	if splitted[0] != SecretFileHeader {
 		return "", nil, ErrInvalidHeader
 	}
 

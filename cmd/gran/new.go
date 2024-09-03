@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/snaztoz/granary/internal/storage"
 	"github.com/snaztoz/granary/internal/util"
@@ -29,7 +30,13 @@ func (sc *subCommandNew) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	if err := storage.New(path, password); err != nil {
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if _, err := storage.Init(f, password); err != nil {
 		log.Fatal(err)
 	}
 

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"io"
 	"log"
+	"os"
 
 	"github.com/snaztoz/granary/internal/storage"
 	"github.com/snaztoz/granary/internal/util"
@@ -34,18 +36,29 @@ func (sc *subCommandSet) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	st, err := storage.Open(path, password)
+	f, err := os.OpenFile(path, os.O_RDWR, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	st, err := storage.Open(f, password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	data, err := st.ReadFile()
+	data, err := st.ReadData()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	data[args.Get(0)] = args.Get(1)
-	if err := st.WriteFile(data); err != nil {
+	if err := st.WriteData(data); err != nil {
+		log.Fatal(err)
+	}
+
+	f.Seek(0, io.SeekStart)
+	if err := st.Persist(f); err != nil {
 		log.Fatal(err)
 	}
 

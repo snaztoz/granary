@@ -2,37 +2,35 @@ package storage
 
 import (
 	"encoding/json"
-	"os"
+	"io"
 
 	"github.com/snaztoz/granary/internal/crypto"
 	"github.com/snaztoz/granary/internal/data"
 )
 
-func New(path, password string) error {
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
+func Init(out io.Writer, password string) (storage *Storage, err error) {
 	key, keyString := crypto.DeriveKey(password)
 	jsonData, _ := json.Marshal(make(data.T))
 
 	ciphertext, err := crypto.Encrypt(jsonData, key)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	content := toFileContent(keyString, ciphertext)
-	if _, err := f.Write([]byte(content)); err != nil {
-		return err
+	content := []byte(toFileContent(keyString, ciphertext))
+	if _, err := out.Write(content); err != nil {
+		return nil, err
 	}
 
-	return nil
+	return &Storage{
+		content:   content,
+		keyString: keyString,
+		key:       key,
+	}, nil
 }
 
-func Open(path, password string) (storage *Storage, err error) {
-	content, err := os.ReadFile(path)
+func Open(in io.Reader, password string) (storage *Storage, err error) {
+	content, err := io.ReadAll(in)
 	if err != nil {
 		return nil, err
 	}
@@ -48,22 +46,20 @@ func Open(path, password string) (storage *Storage, err error) {
 	}
 
 	return &Storage{
-		path:      path,
-		content:   string(content),
+		content:   content,
 		keyString: keyString,
 		key:       key,
 	}, nil
 }
 
 type Storage struct {
-	path      string
-	content   string
+	content   []byte
 	keyString string
 	key       []byte
 }
 
-func (s *Storage) ReadFile() (data data.T, err error) {
-	_, ciphertext, _ := toKeyStringAndData(s.content)
+func (s *Storage) ReadData() (data data.T, err error) {
+	_, ciphertext, _ := toKeyStringAndData(string(s.content))
 
 	plaintext, err := crypto.Decrypt(ciphertext, s.key)
 	if err != nil {
@@ -77,7 +73,7 @@ func (s *Storage) ReadFile() (data data.T, err error) {
 	return data, nil
 }
 
-func (s *Storage) WriteFile(data data.T) error {
+func (s *Storage) WriteData(data data.T) error {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -88,11 +84,14 @@ func (s *Storage) WriteFile(data data.T) error {
 		return err
 	}
 
-	s.content = toFileContent(s.keyString, ciphertext)
+	s.content = []byte(toFileContent(s.keyString, ciphertext))
 
-	if err := os.WriteFile(s.path, []byte(s.content), 0644); err != nil {
+	return nil
+}
+
+func (s *Storage) Persist(out io.Writer) error {
+	if _, err := out.Write(s.content); err != nil {
 		return err
 	}
-
 	return nil
 }

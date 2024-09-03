@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/snaztoz/granary/internal/storage"
 	"github.com/snaztoz/granary/internal/util"
@@ -35,12 +36,18 @@ func (sc *subCommandGet) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	st, err := storage.Open(path, password)
+	f, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	st, err := storage.Open(f, password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	data, err := st.ReadFile()
+	data, err := st.ReadData()
 	if err != nil {
 		log.Fatal(err)
 	}
