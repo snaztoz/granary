@@ -7,6 +7,14 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var (
+	scGet    = subCommandGet{}
+	scList   = subCommandList{}
+	scNew    = subCommandNew{}
+	scRemove = subCommandRemove{}
+	scSet    = subCommandSet{}
+)
+
 func main() {
 	// Remove timestamp
 	log.SetFlags(0)
