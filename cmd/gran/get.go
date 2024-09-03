@@ -21,22 +21,14 @@ func (sc *subCommandGet) usage() string {
 }
 
 func (sc *subCommandGet) handle(c *cli.Context) error {
-	path := c.String("path")
-	if !util.IsFileExists(path) {
-		log.Fatal("file is not exist: ", path)
-	}
-
-	args := c.Args()
-	if args.Len() != 1 {
-		log.Fatal("incorrect number of arguments (usage: gran get <KEY>)")
-	}
+	sc.validate(c)
 
 	password, err := util.AskPassword("Enter passkey")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := os.Open(path)
+	f, err := os.Open(c.String("path"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,4 +50,16 @@ func (sc *subCommandGet) handle(c *cli.Context) error {
 	}
 
 	return nil
+}
+
+func (sc *subCommandGet) validate(c *cli.Context) {
+	path := c.String("path")
+	if !util.IsFileExists(path) {
+		log.Fatal("file is not exist: ", path)
+	}
+
+	args := c.Args()
+	if args.Len() != 1 {
+		log.Fatal("incorrect number of arguments (usage: gran get <KEY>)")
+	}
 }

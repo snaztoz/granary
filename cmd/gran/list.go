@@ -21,17 +21,14 @@ func (sc *subCommandList) usage() string {
 }
 
 func (sc *subCommandList) handle(c *cli.Context) error {
-	path := c.String("path")
-	if !util.IsFileExists(path) {
-		log.Fatal("file is not exist: ", path)
-	}
+	sc.validate(c)
 
 	password, err := util.AskPassword("Enter passkey")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := os.Open(path)
+	f, err := os.Open(c.String("path"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,4 +49,11 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 	}
 
 	return nil
+}
+
+func (sc *subCommandList) validate(c *cli.Context) {
+	path := c.String("path")
+	if !util.IsFileExists(path) {
+		log.Fatal("file is not exist: ", path)
+	}
 }

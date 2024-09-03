@@ -21,22 +21,14 @@ func (sc *subCommandRemove) usage() string {
 }
 
 func (sc *subCommandRemove) handle(c *cli.Context) error {
-	path := c.String("path")
-	if !util.IsFileExists(path) {
-		log.Fatal("file is not exist: ", path)
-	}
-
-	args := c.Args()
-	if args.Len() != 1 {
-		log.Fatal("incorrect number of arguments (usage: gran remove <KEY>)")
-	}
+	sc.validate(c)
 
 	password, err := util.AskPassword("Enter passkey")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := os.OpenFile(path, os.O_RDWR, 0644)
+	f, err := os.OpenFile(c.String("path"), os.O_RDWR, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -63,4 +55,16 @@ func (sc *subCommandRemove) handle(c *cli.Context) error {
 	}
 
 	return nil
+}
+
+func (sc *subCommandRemove) validate(c *cli.Context) {
+	path := c.String("path")
+	if !util.IsFileExists(path) {
+		log.Fatal("file is not exist: ", path)
+	}
+
+	args := c.Args()
+	if args.Len() != 1 {
+		log.Fatal("incorrect number of arguments (usage: gran remove <KEY>)")
+	}
 }
