@@ -1,4 +1,4 @@
-package main
+package subcommand
 
 import (
 	"fmt"
@@ -10,17 +10,17 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-type subCommandList struct{}
+type Get struct{}
 
-func (sc *subCommandList) name() string {
-	return "list"
+func (sc *Get) Name() string {
+	return "get"
 }
 
-func (sc *subCommandList) usage() string {
-	return "get the list of all stored secrets"
+func (sc *Get) Usage() string {
+	return "get a secret value"
 }
 
-func (sc *subCommandList) handle(c *cli.Context) error {
+func (sc *Get) Handle(c *cli.Context) error {
 	sc.validate(c)
 
 	password, err := util.AskPassword("Enter passkey")
@@ -44,16 +44,22 @@ func (sc *subCommandList) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	if len(data) > 0 {
-		fmt.Println(data)
+	value, exist := data[c.Args().First()]
+	if exist {
+		fmt.Println(value)
 	}
 
 	return nil
 }
 
-func (sc *subCommandList) validate(c *cli.Context) {
+func (sc *Get) validate(c *cli.Context) {
 	path := c.String("path")
 	if !util.IsFileExists(path) {
 		log.Fatal("file is not exist: ", path)
+	}
+
+	args := c.Args()
+	if args.Len() != 1 {
+		log.Fatal("incorrect number of arguments (usage: gran get <KEY>)")
 	}
 }

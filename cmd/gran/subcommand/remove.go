@@ -1,4 +1,4 @@
-package main
+package subcommand
 
 import (
 	"io"
@@ -10,17 +10,17 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-type subCommandSet struct{}
+type Remove struct{}
 
-func (sc *subCommandSet) name() string {
-	return "set"
+func (sc *Remove) Name() string {
+	return "remove"
 }
 
-func (sc *subCommandSet) usage() string {
-	return "set a secret value"
+func (sc *Remove) Usage() string {
+	return "remove a secret"
 }
 
-func (sc *subCommandSet) handle(c *cli.Context) error {
+func (sc *Remove) Handle(c *cli.Context) error {
 	sc.validate(c)
 
 	password, err := util.AskPassword("Enter passkey")
@@ -44,12 +44,14 @@ func (sc *subCommandSet) handle(c *cli.Context) error {
 		log.Fatal(err)
 	}
 
-	data[c.Args().Get(0)] = c.Args().Get(1)
-
+	delete(data, c.Args().First())
 	if err := st.WriteData(data); err != nil {
 		log.Fatal(err)
 	}
 
+	// remove all previous file content as they will mess up with
+	// the new Base64 encoded data
+	f.Truncate(0)
 	f.Seek(0, io.SeekStart)
 	if err := st.Persist(f); err != nil {
 		log.Fatal(err)
@@ -58,14 +60,14 @@ func (sc *subCommandSet) handle(c *cli.Context) error {
 	return nil
 }
 
-func (sc *subCommandSet) validate(c *cli.Context) {
+func (sc *Remove) validate(c *cli.Context) {
 	path := c.String("path")
 	if !util.IsFileExists(path) {
 		log.Fatal("file is not exist: ", path)
 	}
 
 	args := c.Args()
-	if args.Len() != 2 {
-		log.Fatal("incorrect number of arguments (usage: gran set <KEY> <VALUE>)")
+	if args.Len() != 1 {
+		log.Fatal("incorrect number of arguments (usage: gran remove <KEY>)")
 	}
 }

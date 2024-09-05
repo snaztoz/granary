@@ -4,16 +4,35 @@ import (
 	"log"
 	"os"
 
+	"github.com/snaztoz/granary/cmd/gran/subcommand"
 	"github.com/urfave/cli/v2"
 )
 
+type subCommand interface {
+	Name() string
+	Usage() string
+	Handle(c *cli.Context) error
+}
+
 var (
-	scGet    = subCommandGet{}
-	scList   = subCommandList{}
-	scNew    = subCommandNew{}
-	scRemove = subCommandRemove{}
-	scSet    = subCommandSet{}
+	cliSubCommands = []*cli.Command{}
 )
+
+func init() {
+	for _, v := range []subCommand{
+		&subcommand.Get{},
+		&subcommand.List{},
+		&subcommand.New{},
+		&subcommand.Remove{},
+		&subcommand.Set{},
+	} {
+		cliSubCommands = append(cliSubCommands, &cli.Command{
+			Name:   v.Name(),
+			Usage:  v.Usage(),
+			Action: v.Handle,
+		})
+	}
+}
 
 func main() {
 	// Remove timestamp
@@ -30,33 +49,7 @@ func main() {
 				Usage:   "Path to Granary secret file",
 			},
 		},
-		Commands: []*cli.Command{
-			{
-				Name:   scGet.name(),
-				Usage:  scGet.usage(),
-				Action: scGet.handle,
-			},
-			{
-				Name:   scList.name(),
-				Usage:  scList.usage(),
-				Action: scList.handle,
-			},
-			{
-				Name:   scNew.name(),
-				Usage:  scNew.usage(),
-				Action: scNew.handle,
-			},
-			{
-				Name:   scRemove.name(),
-				Usage:  scRemove.usage(),
-				Action: scRemove.handle,
-			},
-			{
-				Name:   scSet.name(),
-				Usage:  scSet.usage(),
-				Action: scSet.handle,
-			},
-		},
+		Commands: cliSubCommands,
 	}
 
 	if err := app.Run(os.Args); err != nil {

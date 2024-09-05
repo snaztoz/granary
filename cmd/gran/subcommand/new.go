@@ -1,4 +1,4 @@
-package main
+package subcommand
 
 import (
 	"log"
@@ -9,28 +9,25 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-type subCommandNew struct{}
+type New struct{}
 
-func (sc *subCommandNew) name() string {
+func (sc *New) Name() string {
 	return "new"
 }
 
-func (sc *subCommandNew) usage() string {
+func (sc *New) Usage() string {
 	return "create a new Granary secret file"
 }
 
-func (sc *subCommandNew) handle(c *cli.Context) error {
-	path := c.String("path")
-	if util.IsFileExists(path) {
-		log.Fatal("file already exists: ", path)
-	}
+func (sc *New) Handle(c *cli.Context) error {
+	sc.validate(c)
 
 	password, err := util.AskPassword("Enter a new passkey")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := os.Create(path)
+	f, err := os.Create(c.String("path"))
 	if err != nil {
 		return err
 	}
@@ -41,4 +38,11 @@ func (sc *subCommandNew) handle(c *cli.Context) error {
 	}
 
 	return nil
+}
+
+func (sc *New) validate(c *cli.Context) {
+	path := c.String("path")
+	if util.IsFileExists(path) {
+		log.Fatal("file already exists: ", path)
+	}
 }
