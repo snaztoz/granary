@@ -45,7 +45,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "path",
 				Aliases: []string{"p"},
-				Value:   "secrets.gran",
+				Value:   "secrets",
 				Usage:   "Path to Granary secret file",
 			},
 		},
