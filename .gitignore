@@ -2,4 +2,4 @@
 /gran
 
 # Temporary/test Granary secret files
-/*.gran
+/secrets
