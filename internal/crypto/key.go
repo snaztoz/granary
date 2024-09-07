@@ -9,30 +9,30 @@ import (
 )
 
 var (
-	ErrPasswordMismatch = errors.New("incorrect password")
+	ErrPassphraseMismatch = errors.New("incorrect passphrase")
 )
 
-func DeriveKey(password string) (key []byte, keyString string) {
+func DeriveKey(passphrase string) (key []byte, keyString string) {
 	salt := randBytes(16)
-	return deriveKeyWithSalt(password, salt)
+	return deriveKeyWithSalt(passphrase, salt)
 }
 
-func MatchPassword(password, keyString string) (key []byte, err error) {
+func MatchPassphrase(passphrase, keyString string) (key []byte, err error) {
 	salt, _, err := toSaltAndHash(keyString)
 	if err != nil {
 		return nil, err
 	}
 
-	key, calculatedKeyString := deriveKeyWithSalt(password, salt)
+	key, calculatedKeyString := deriveKeyWithSalt(passphrase, salt)
 	if calculatedKeyString != keyString {
-		return nil, ErrPasswordMismatch
+		return nil, ErrPassphraseMismatch
 	}
 
 	return key, nil
 }
 
-func deriveKeyWithSalt(password string, salt []byte) (key []byte, keyString string) {
-	key = pbkdf2.Key([]byte(password), salt, 4096, 32, sha256.New)
+func deriveKeyWithSalt(passphrase string, salt []byte) (key []byte, keyString string) {
+	key = pbkdf2.Key([]byte(passphrase), salt, 4096, 32, sha256.New)
 	hash := argon2.IDKey(key, salt, 1, 64*1024, 4, 32)
 
 	keyString = toKeyString(salt, hash[:])

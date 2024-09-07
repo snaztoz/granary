@@ -9,10 +9,10 @@ import (
 )
 
 func TestReadWriteStorage(t *testing.T) {
-	password := "my-password"
+	passphrase := "my-passphrase"
 	data := map[string]string{"foo": "bar"}
 
-	st, err := storage.Init(new(bytes.Buffer), password)
+	st, err := storage.Init(new(bytes.Buffer), passphrase)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -37,10 +37,10 @@ func TestReadWriteStorage(t *testing.T) {
 }
 
 func TestPersistingData(t *testing.T) {
-	password := "my-password"
+	passphrase := "my-passphrase"
 	data := map[string]string{"foo": "bar"}
 
-	st, err := storage.Init(new(bytes.Buffer), password)
+	st, err := storage.Init(new(bytes.Buffer), passphrase)
 	if err != nil {
 		t.Fatal(err)
 	}

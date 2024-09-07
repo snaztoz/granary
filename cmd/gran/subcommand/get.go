@@ -23,7 +23,7 @@ func (sc *Get) Usage() string {
 func (sc *Get) Handle(c *cli.Context) error {
 	sc.validate(c)
 
-	password, err := util.AskPassword("Enter passkey")
+	passphrase, err := util.AskPassphrase("Enter passphrase")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func (sc *Get) Handle(c *cli.Context) error {
 	}
 	defer f.Close()
 
-	st, err := storage.Open(f, password)
+	st, err := storage.Open(f, passphrase)
 	if err != nil {
 		log.Fatal(err)
 	}

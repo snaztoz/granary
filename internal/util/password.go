@@ -7,10 +7,10 @@ import (
 	"golang.org/x/term"
 )
 
-func AskPassword(prompt string) (string, error) {
+func AskPassphrase(prompt string) (string, error) {
 	fmt.Fprintf(os.Stderr, "%s: ", prompt)
 
-	passwordBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
+	passphraseBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
 	if err != nil {
 		return "", err
 	}
@@ -18,5 +18,5 @@ func AskPassword(prompt string) (string, error) {
 	// change line
 	fmt.Fprint(os.Stderr, "\n")
 
-	return string(passwordBytes), nil
+	return string(passphraseBytes), nil
 }

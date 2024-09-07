@@ -22,7 +22,7 @@ func (sc *New) Usage() string {
 func (sc *New) Handle(c *cli.Context) error {
 	sc.validate(c)
 
-	password, err := util.AskPassword("Enter a new passkey")
+	passphrase, err := util.AskPassphrase("Enter a new passphrase")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func (sc *New) Handle(c *cli.Context) error {
 	}
 	defer f.Close()
 
-	if _, err := storage.Init(f, password); err != nil {
+	if _, err := storage.Init(f, passphrase); err != nil {
 		log.Fatal(err)
 	}
 

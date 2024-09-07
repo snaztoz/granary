@@ -7,11 +7,11 @@ import (
 )
 
 func TestKeyDerivation(t *testing.T) {
-	password := "foobarbat123"
+	passphrase := "foobarbat123"
 
-	_, keyString := crypto.DeriveKey(password)
+	_, keyString := crypto.DeriveKey(passphrase)
 
-	if _, err := crypto.MatchPassword(password, keyString); err != nil {
-		t.Fatal("expecting password to match")
+	if _, err := crypto.MatchPassphrase(passphrase, keyString); err != nil {
+		t.Fatal("expecting passphrase to match")
 	}
 }

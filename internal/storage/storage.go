@@ -8,8 +8,8 @@ import (
 	"github.com/snaztoz/granary/internal/data"
 )
 
-func Init(out io.Writer, password string) (storage *Storage, err error) {
-	key, keyString := crypto.DeriveKey(password)
+func Init(out io.Writer, passphrase string) (storage *Storage, err error) {
+	key, keyString := crypto.DeriveKey(passphrase)
 	jsonData, _ := json.Marshal(make(data.T))
 
 	ciphertext, err := crypto.Encrypt(jsonData, key)
@@ -29,7 +29,7 @@ func Init(out io.Writer, password string) (storage *Storage, err error) {
 	}, nil
 }
 
-func Open(in io.Reader, password string) (storage *Storage, err error) {
+func Open(in io.Reader, passphrase string) (storage *Storage, err error) {
 	content, err := io.ReadAll(in)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func Open(in io.Reader, password string) (storage *Storage, err error) {
 		return nil, err
 	}
 
-	key, err := crypto.MatchPassword(password, keyString)
+	key, err := crypto.MatchPassphrase(passphrase, keyString)
 	if err != nil {
 		return nil, err
 	}

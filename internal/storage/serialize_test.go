@@ -10,8 +10,8 @@ import (
 )
 
 func TestSerialization(t *testing.T) {
-	password := "my-password"
-	key, keyString := crypto.DeriveKey(password)
+	passphrase := "my-passphrase"
+	key, keyString := crypto.DeriveKey(passphrase)
 
 	data := make(data.T)
 	jsonData, _ := json.Marshal(data)
