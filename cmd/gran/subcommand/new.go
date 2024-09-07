@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/snaztoz/granary/cmd/gran/util"
 	"github.com/snaztoz/granary/internal/storage"
-	"github.com/snaztoz/granary/internal/util"
 	"github.com/urfave/cli/v2"
 )
 
