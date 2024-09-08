@@ -40,6 +40,10 @@ func (sc *New) Handle(c *cli.Context) error {
 	return nil
 }
 
+func (sc *New) Flags() []cli.Flag {
+	return []cli.Flag{}
+}
+
 func (sc *New) validate(c *cli.Context) {
 	path := c.String("path")
 	if util.IsFileExists(path) {

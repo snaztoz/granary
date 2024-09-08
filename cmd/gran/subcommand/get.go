@@ -53,6 +53,10 @@ func (sc *Get) Handle(c *cli.Context) error {
 	return nil
 }
 
+func (sc *Get) Flags() []cli.Flag {
+	return []cli.Flag{}
+}
+
 func (sc *Get) validate(c *cli.Context) {
 	path := c.String("path")
 	if !util.IsFileExists(path) {

@@ -59,6 +59,10 @@ func (sc *Set) Handle(c *cli.Context) error {
 	return nil
 }
 
+func (sc *Set) Flags() []cli.Flag {
+	return []cli.Flag{}
+}
+
 func (sc *Set) validate(c *cli.Context) {
 	path := c.String("path")
 	if !util.IsFileExists(path) {

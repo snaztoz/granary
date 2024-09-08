@@ -12,6 +12,7 @@ type subCommand interface {
 	Name() string
 	Usage() string
 	Handle(c *cli.Context) error
+	Flags() []cli.Flag
 }
 
 var (
@@ -30,6 +31,7 @@ func init() {
 			Name:   v.Name(),
 			Usage:  v.Usage(),
 			Action: v.Handle,
+			Flags:  v.Flags(),
 		})
 	}
 }

@@ -61,6 +61,10 @@ func (sc *Remove) Handle(c *cli.Context) error {
 	return nil
 }
 
+func (sc *Remove) Flags() []cli.Flag {
+	return []cli.Flag{}
+}
+
 func (sc *Remove) validate(c *cli.Context) {
 	path := c.String("path")
 	if !util.IsFileExists(path) {
