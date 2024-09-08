@@ -22,13 +22,14 @@ func (sc *Remove) Usage() string {
 
 func (sc *Remove) Handle(c *cli.Context) error {
 	sc.validate(c)
+	path := c.String("path")
 
-	passphrase, err := util.AskPassphrase("Enter passphrase")
+	passphrase, err := util.GetPassphrase(path+".gpass", "Enter passphrase")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := os.OpenFile(c.String("path"), os.O_RDWR, 0644)
+	f, err := os.OpenFile(path, os.O_RDWR, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -22,13 +22,14 @@ func (sc *List) Usage() string {
 
 func (sc *List) Handle(c *cli.Context) error {
 	sc.validate(c)
+	path := c.String("path")
 
-	passphrase, err := util.AskPassphrase("Enter passphrase")
+	passphrase, err := util.GetPassphrase(path+".gpass", "Enter passphrase")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := os.Open(c.String("path"))
+	f, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}

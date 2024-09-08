@@ -3,3 +3,4 @@
 
 # Temporary/test Granary secret files
 /secrets
+/*.gpass

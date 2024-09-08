@@ -22,7 +22,7 @@ func (sc *New) Usage() string {
 func (sc *New) Handle(c *cli.Context) error {
 	sc.validate(c)
 
-	passphrase, err := util.AskPassphrase("Enter a new passphrase")
+	passphrase, err := util.PromptPassphrase("Enter passphrase")
 	if err != nil {
 		log.Fatal(err)
 	}
