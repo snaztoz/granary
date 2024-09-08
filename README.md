@@ -38,6 +38,21 @@ p.s. This is just a hobby project, not a professional tool. Use at your own risk
     gran remove my-password
     ```
 
+6. To avoid entering the passphrase each time `gran` command is invoked, you can create a file in the current working directory which contains the passphrase itself. The name of the file should be the same as the secret file's but has the extension of `.gpass`:
+
+    ```sh
+    # for example, if you have a secret file named "secrets"
+    # and the passphrase is "my-secrets-password", then you
+    # should create a file named "secrets.gpass" with the
+    # content of "my-secrets-password".
+
+    gran new
+    echo my-secrets-password > secrets.gpass
+
+    # now this won't prompting for passphrase again
+    gran set foo bar
+    ```
+
 ## Installation
 
 0. For convenience, make sure that you have both `Go` compiler and `make` build tool installed. But if you don't want to use `make`, you can check the content of `Makefile` and run the build commands directly on your shell (still need a `Go` compiler, though).
