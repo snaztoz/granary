@@ -46,8 +46,12 @@ p.s. This is just a hobby project, not a professional tool. Use at your own risk
     # should create a file named "secrets.gpass" with the
     # content of "my-secrets-password".
 
+    # First method, create the file manually:
     gran new
     echo my-secrets-password > secrets.gpass
+
+    # ... or the second method, do it in one command:
+    gran new --create-passfile
 
     # now this won't prompting for passphrase again
     gran set foo bar
